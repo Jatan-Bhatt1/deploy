@@ -43,20 +43,20 @@
         }
       ]
     ],
-    "extra": {
-      "router": {
-        "root": "Frontend/app"
-      },
-      "eas": {
-        "projectId": "33be89d0-da78-4fab-b2d5-e988c786dc96"
-      }
-    },
     "owner": "jatan0000",
     "runtimeVersion": {
       "policy": "appVersion"
     },
     "updates": {
       "url": "https://u.expo.dev/33be89d0-da78-4fab-b2d5-e988c786dc96"
+    },
+    "extra": {
+      "router": {
+        "root": "Frontend/app"
+      },
+      "eas": {
+        "projectId": "06f3c4d4-739c-4021-86bc-51766083f802"
+      }
     }
   }
 }
