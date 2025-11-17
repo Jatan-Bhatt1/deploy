@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: trot-backend
+    env: node
+    buildCommand: cd Backend && npm install
+    startCommand: cd Backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      # Add your environment variables in Render dashboard:
+      # - MONGO_URI
+      # - JWT_SECRET
+      # - CLIENT_ORIGIN
+      # - CLOUD_NAME
+      # - CLOUD_API_KEY
+      # - CLOUD_API_SECRET
+

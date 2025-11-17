@@ -26,14 +26,12 @@ const PROFILE_MENU = [
     icon: "person-add-outline",
   },
   { key: "add-skills", label: "Add Skills", icon: "construct-outline" },
-  { key: "credits", label: "Credits", icon: "star-outline" },
-  { key: "buy-credits", label: "Buy Credits", icon: "card-outline" },
   { key: "create-avatar", label: "Create Avatar", icon: "color-wand-outline" },
 ];
 
 export default function Profile() {
   const router = useRouter();
-  const { theme } = useTheme();
+  const { theme, isDark } = useTheme();
   const [avatarModal, setAvatarModal] = useState(false);
   const [enhanceOpen, setEnhanceOpen] = useState(false);
   const [readOnlyEnhanceOpen, setReadOnlyEnhanceOpen] = useState(false);
@@ -204,16 +202,15 @@ export default function Profile() {
 
       <Modal visible={avatarModal} animationType="slide" transparent>
         <View style={styles.modalBackdrop}>
-          <View style={styles.modalCard}>
-            <Text style={styles.modalTitle}>Create Your Avatar</Text>
-            <Text style={styles.modalHint}>
+          <View style={[styles.modalCard, { backgroundColor: theme.surface }]}>
+            <Text style={[styles.modalTitle, { color: theme.text }]}>Create Your Avatar</Text>
+            <Text style={[styles.modalHint, { color: theme.muted }]}>
               Pick a photo from your device, then Save
             </Text>
             <TouchableOpacity
               style={[
                 styles.btn,
-                styles.btnSecondary,
-                { marginTop: 12, alignSelf: "flex-start" },
+                { backgroundColor: theme.secondaryBackground, marginTop: 12, alignSelf: "flex-start" },
               ]}
               onPress={async () => {
                 try {
@@ -250,16 +247,16 @@ export default function Profile() {
 
             <View style={styles.modalActions}>
               <TouchableOpacity
-                style={[styles.btn, styles.btnSecondary]}
+                style={[styles.btn, { backgroundColor: theme.secondaryBackground }]}
                 onPress={() => setAvatarModal(false)}
               >
-                <Text style={styles.btnText}>Close</Text>
+                <Text style={[styles.btnText, { color: theme.text }]}>Close</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 disabled={!pendingAvatarUri}
                 style={[
                   styles.btn,
-                  styles.btnPrimary,
+                  { backgroundColor: theme.primary },
                   !pendingAvatarUri && { opacity: 0.6 },
                 ]}
                 onPress={async () => {
@@ -312,7 +309,7 @@ export default function Profile() {
                   }
                 }}
               >
-                <Text style={styles.btnText}>Save</Text>
+                <Text style={[styles.btnText, { color: '#fff' }]}>Save</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -321,13 +318,13 @@ export default function Profile() {
 
       <Modal visible={enhanceOpen} animationType="slide" transparent>
         <View style={styles.modalBackdrop}>
-          <View style={styles.modalCard}>
-            <Text style={styles.modalTitle}>Enhance Profile</Text>
-            <Text style={styles.modalHint}>
+          <View style={[styles.modalCard, { backgroundColor: theme.surface }]}>
+            <Text style={[styles.modalTitle, { color: theme.text }]}>Enhance Profile</Text>
+            <Text style={[styles.modalHint, { color: theme.muted }]}>
               Add more details to personalize your account
             </Text>
 
-            <Text style={styles.fieldLabel}>Gender</Text>
+            <Text style={[styles.fieldLabel, { color: theme.muted }]}>Gender</Text>
             <View style={styles.radioRow}>
               {[
                 { key: "male", label: "Male" },
@@ -342,19 +339,20 @@ export default function Profile() {
                   <View
                     style={[
                       styles.radioOuter,
+                      { borderColor: gender === opt.key ? theme.primary : theme.muted },
                       gender === opt.key && styles.radioOuterActive,
                     ]}
                   >
-                    {gender === opt.key && <View style={styles.radioInner} />}
+                    {gender === opt.key && <View style={[styles.radioInner, { backgroundColor: theme.primary }]} />}
                   </View>
-                  <Text style={styles.radioLabel}>{opt.label}</Text>
+                  <Text style={[styles.radioLabel, { color: theme.text }]}>{opt.label}</Text>
                 </TouchableOpacity>
               ))}
             </View>
 
-            <Text style={styles.fieldLabel}>Date of Birth</Text>
+            <Text style={[styles.fieldLabel, { color: theme.muted }]}>Date of Birth</Text>
             <TouchableOpacity
-              style={[styles.input, { justifyContent: "center" }]}
+              style={[styles.input, { justifyContent: "center", backgroundColor: theme.surface, borderColor: theme.border }]}
               onPress={() => {
                 const init = /^\d{4}-\d{2}-\d{2}$/.test(dob)
                   ? new Date(
@@ -372,9 +370,9 @@ export default function Profile() {
               </Text>
             </TouchableOpacity>
 
-            <Text style={styles.fieldLabel}>Role</Text>
+            <Text style={[styles.fieldLabel, { color: theme.muted }]}>Role</Text>
             <TouchableOpacity
-              style={[styles.input, { justifyContent: "center" }]}
+              style={[styles.input, { justifyContent: "center", backgroundColor: theme.surface, borderColor: theme.border }]}
               onPress={() => setRolePickerOpen(true)}
             >
               <Text style={{ color: role ? theme.text : theme.muted }}>
@@ -384,7 +382,7 @@ export default function Profile() {
             <TextInput
               placeholder="Phone Number"
               placeholderTextColor={theme.muted}
-              style={[styles.input, { backgroundColor: theme.surface, color: theme.text }]}
+              style={[styles.input, { backgroundColor: theme.surface, color: theme.text, borderColor: theme.border }]}
               keyboardType="phone-pad"
               onChangeText={(t) => setPhone(t)}
               value={phone}
@@ -392,20 +390,20 @@ export default function Profile() {
             <TextInput
               placeholder="Education"
               placeholderTextColor={theme.muted}
-              style={[styles.input, { backgroundColor: theme.surface, color: theme.text }]}
+              style={[styles.input, { backgroundColor: theme.surface, color: theme.text, borderColor: theme.border }]}
               onChangeText={(t) => setEducation(t)}
               value={education}
             />
 
             <View style={styles.modalActions}>
               <TouchableOpacity
-                style={[styles.btn, styles.btnSecondary]}
+                style={[styles.btn, { backgroundColor: theme.secondaryBackground }]}
                 onPress={() => setEnhanceOpen(false)}
               >
-                <Text style={styles.btnText}>Cancel</Text>
+                <Text style={[styles.btnText, { color: theme.text }]}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={[styles.btn, styles.btnPrimary]}
+                style={[styles.btn, { backgroundColor: theme.primary }]}
                 onPress={async () => {
                   try {
                     const token = await AsyncStorage.getItem("authToken");
@@ -471,16 +469,16 @@ export default function Profile() {
       {/* Read-only Enhanced Profile Modal */}
       <Modal visible={readOnlyEnhanceOpen} animationType="slide" transparent>
         <View style={styles.modalBackdrop}>
-          <View style={styles.modalCard}>
-            <Text style={[styles.modalTitle, { color: '#111827' }]}>Enhanced Profile</Text>
-            <Text style={[styles.modalHint, { color: '#6b7280' }]}>
+          <View style={[styles.modalCard, { backgroundColor: theme.surface }]}>
+            <Text style={[styles.modalTitle, { color: theme.text }]}>Enhanced Profile</Text>
+            <Text style={[styles.modalHint, { color: theme.muted }]}>
               These details are locked. Edit later from Settings.
             </Text>
 
             <View style={{ marginTop: 12, gap: 12 }}>
               <View style={styles.detailRow}>
-                <Text style={[styles.detailLabel, { color: '#6b7280' }]}>Gender</Text>
-                <Text style={[styles.detailValue, { color: '#111827' }]} numberOfLines={1}>
+                <Text style={[styles.detailLabel, { color: theme.muted }]}>Gender</Text>
+                <Text style={[styles.detailValue, { color: theme.text }]} numberOfLines={1}>
                   {enhancedProfile?.gender
                     ? enhancedProfile.gender.charAt(0).toUpperCase() +
                       enhancedProfile.gender.slice(1)
@@ -488,14 +486,14 @@ export default function Profile() {
                 </Text>
               </View>
               <View style={styles.detailRow}>
-                <Text style={[styles.detailLabel, { color: '#6b7280' }]}>Date of Birth</Text>
-                <Text style={[styles.detailValue, { color: '#111827' }]} numberOfLines={1}>
+                <Text style={[styles.detailLabel, { color: theme.muted }]}>Date of Birth</Text>
+                <Text style={[styles.detailValue, { color: theme.text }]} numberOfLines={1}>
                   {enhancedProfile?.dob || "—"}
                 </Text>
               </View>
               <View style={styles.detailRow}>
-                <Text style={[styles.detailLabel, { color: '#6b7280' }]}>Role</Text>
-                <Text style={[styles.detailValue, { color: '#111827' }]} numberOfLines={1}>
+                <Text style={[styles.detailLabel, { color: theme.muted }]}>Role</Text>
+                <Text style={[styles.detailValue, { color: theme.text }]} numberOfLines={1}>
                   {enhancedProfile?.role
                     ? enhancedProfile.role.charAt(0).toUpperCase() +
                       enhancedProfile.role.slice(1)
@@ -503,14 +501,14 @@ export default function Profile() {
                 </Text>
               </View>
               <View style={styles.detailRow}>
-                <Text style={[styles.detailLabel, { color: '#6b7280' }]}>Phone</Text>
-                <Text style={[styles.detailValue, { color: '#111827' }]} numberOfLines={1}>
+                <Text style={[styles.detailLabel, { color: theme.muted }]}>Phone</Text>
+                <Text style={[styles.detailValue, { color: theme.text }]} numberOfLines={1}>
                   {enhancedProfile?.phone || "—"}
                 </Text>
               </View>
               <View style={styles.detailRow}>
-                <Text style={[styles.detailLabel, { color: '#6b7280' }]}>Education</Text>
-                <Text style={[styles.detailValue, { color: '#111827' }]} numberOfLines={1}>
+                <Text style={[styles.detailLabel, { color: theme.muted }]}>Education</Text>
+                <Text style={[styles.detailValue, { color: theme.text }]} numberOfLines={1}>
                   {enhancedProfile?.education || "—"}
                 </Text>
               </View>
@@ -518,13 +516,13 @@ export default function Profile() {
 
             <View style={styles.modalActions}>
               <TouchableOpacity
-                style={[styles.btn, styles.btnSecondary]}
+                style={[styles.btn, { backgroundColor: theme.secondaryBackground }]}
                 onPress={() => setReadOnlyEnhanceOpen(false)}
               >
-                <Text style={[styles.btnText, { color: '#111827' }]}>Close</Text>
+                <Text style={[styles.btnText, { color: theme.text }]}>Close</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={[styles.btn, styles.btnPrimary]}
+                style={[styles.btn, { backgroundColor: theme.primary }]}
                 onPress={() => {
                   // Prefill editor with current values and switch to edit modal
                   setGender((enhancedProfile?.gender ?? '') as string);
@@ -546,9 +544,9 @@ export default function Profile() {
       {/* My Profile - read-only details */}
       <Modal visible={myProfileOpen} animationType="slide" transparent>
         <View style={styles.modalBackdrop}>
-          <View style={styles.modalCard}>
-            <Text style={styles.modalTitle}>My Profile</Text>
-            <Text style={styles.modalHint}>Your account details</Text>
+          <View style={[styles.modalCard, { backgroundColor: theme.surface }]}>
+            <Text style={[styles.modalTitle, { color: theme.text }]}>My Profile</Text>
+            <Text style={[styles.modalHint, { color: theme.muted }]}>Your account details</Text>
 
             <View style={{ alignItems: "center", marginTop: 12 }}>
               <Image
@@ -559,20 +557,20 @@ export default function Profile() {
 
             <View style={{ marginTop: 16, gap: 12 }}>
               <View style={styles.detailRow}>
-                <Text style={styles.detailLabel}>Username</Text>
-                <Text style={styles.detailValue} numberOfLines={1}>
+                <Text style={[styles.detailLabel, { color: theme.muted }]}>Username</Text>
+                <Text style={[styles.detailValue, { color: theme.text }]} numberOfLines={1}>
                   {name || "—"}
                 </Text>
               </View>
               <View style={styles.detailRow}>
-                <Text style={styles.detailLabel}>Email</Text>
-                <Text style={styles.detailValue} numberOfLines={1}>
+                <Text style={[styles.detailLabel, { color: theme.muted }]}>Email</Text>
+                <Text style={[styles.detailValue, { color: theme.text }]} numberOfLines={1}>
                   {email || "—"}
                 </Text>
               </View>
               <View style={styles.detailRow}>
-                <Text style={styles.detailLabel}>Gender</Text>
-                <Text style={styles.detailValue} numberOfLines={1}>
+                <Text style={[styles.detailLabel, { color: theme.muted }]}>Gender</Text>
+                <Text style={[styles.detailValue, { color: theme.text }]} numberOfLines={1}>
                   {(enhancedProfile?.gender &&
                     enhancedProfile.gender.charAt(0).toUpperCase() +
                       enhancedProfile.gender.slice(1)) ||
@@ -580,14 +578,14 @@ export default function Profile() {
                 </Text>
               </View>
               <View style={styles.detailRow}>
-                <Text style={styles.detailLabel}>Date of Birth</Text>
-                <Text style={styles.detailValue} numberOfLines={1}>
+                <Text style={[styles.detailLabel, { color: theme.muted }]}>Date of Birth</Text>
+                <Text style={[styles.detailValue, { color: theme.text }]} numberOfLines={1}>
                   {enhancedProfile?.dob || "—"}
                 </Text>
               </View>
               <View style={styles.detailRow}>
-                <Text style={styles.detailLabel}>Role</Text>
-                <Text style={styles.detailValue} numberOfLines={1}>
+                <Text style={[styles.detailLabel, { color: theme.muted }]}>Role</Text>
+                <Text style={[styles.detailValue, { color: theme.text }]} numberOfLines={1}>
                   {(enhancedProfile?.role &&
                     enhancedProfile.role.charAt(0).toUpperCase() +
                       enhancedProfile.role.slice(1)) ||
@@ -595,20 +593,20 @@ export default function Profile() {
                 </Text>
               </View>
               <View style={styles.detailRow}>
-                <Text style={styles.detailLabel}>Phone Number</Text>
-                <Text style={styles.detailValue} numberOfLines={1}>
+                <Text style={[styles.detailLabel, { color: theme.muted }]}>Phone Number</Text>
+                <Text style={[styles.detailValue, { color: theme.text }]} numberOfLines={1}>
                   {enhancedProfile?.phone || "—"}
                 </Text>
               </View>
               <View style={styles.detailRow}>
-                <Text style={styles.detailLabel}>Education</Text>
-                <Text style={styles.detailValue} numberOfLines={1}>
+                <Text style={[styles.detailLabel, { color: theme.muted }]}>Education</Text>
+                <Text style={[styles.detailValue, { color: theme.text }]} numberOfLines={1}>
                   {enhancedProfile?.education || "—"}
                 </Text>
               </View>
               <View style={styles.detailRow}>
-                <Text style={styles.detailLabel}>Skills</Text>
-                <Text style={[styles.detailValue, { flex: 1, textAlign: "left" }]} numberOfLines={0}>
+                <Text style={[styles.detailLabel, { color: theme.muted }]}>Skills</Text>
+                <Text style={[styles.detailValue, { flex: 1, textAlign: "left", color: theme.text }]} numberOfLines={0}>
                   {skills.length 
                     ? skills.map(skill => `${skill.name} (${skill.category})`).join("\n") 
                     : "—"}
@@ -618,10 +616,10 @@ export default function Profile() {
 
             <View style={styles.modalActions}>
               <TouchableOpacity
-                style={[styles.btn, styles.btnPrimary]}
+                style={[styles.btn, { backgroundColor: theme.primary }]}
                 onPress={() => setMyProfileOpen(false)}
               >
-                <Text style={styles.btnText}>Close</Text>
+                <Text style={[styles.btnText, { color: '#fff' }]}>Close</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -635,6 +633,7 @@ export default function Profile() {
           mode="date"
           display={Platform.OS === "android" ? "calendar" : "spinner"}
           maximumDate={new Date()}
+          themeVariant={isDark ? "dark" : "light"}
           onChange={(event, date) => {
             if (Platform.OS === "android") setDobPickerOpen(false);
             if (!date) return;
@@ -653,28 +652,28 @@ export default function Profile() {
       {/* Role Picker Modal */}
       <Modal visible={rolePickerOpen} animationType="fade" transparent>
         <View style={styles.modalBackdrop}>
-          <View style={styles.modalCard}>
-            <Text style={styles.modalTitle}>Select Role</Text>
+          <View style={[styles.modalCard, { backgroundColor: theme.surface }]}>
+            <Text style={[styles.modalTitle, { color: theme.text }]}>Select Role</Text>
             {(["student", "professional", "other"] as const).map((opt) => (
               <TouchableOpacity
                 key={opt}
-                style={[styles.row, { paddingHorizontal: 0 }]}
+                style={[styles.row, { paddingHorizontal: 0, backgroundColor: theme.surface }]}
                 onPress={() => {
                   setRole(opt);
                   setRolePickerOpen(false);
                 }}
               >
-                <Text style={styles.rowLabel}>
+                <Text style={[styles.rowLabel, { color: theme.text }]}>
                   {opt[0].toUpperCase() + opt.slice(1)}
                 </Text>
               </TouchableOpacity>
             ))}
             <View style={styles.modalActions}>
               <TouchableOpacity
-                style={[styles.btn, styles.btnSecondary]}
+                style={[styles.btn, { backgroundColor: theme.secondaryBackground }]}
                 onPress={() => setRolePickerOpen(false)}
               >
-                <Text style={styles.btnText}>Close</Text>
+                <Text style={[styles.btnText, { color: theme.text }]}>Close</Text>
               </TouchableOpacity>
             </View>
           </View>

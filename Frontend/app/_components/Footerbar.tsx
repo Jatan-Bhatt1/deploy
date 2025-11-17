@@ -77,7 +77,7 @@
 //   iconContainer: { alignItems: "center" },
 //   label: { fontSize: 12, color: "white", marginTop: 2 },
 // });
-import { Entypo, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
+import { Entypo, FontAwesome5, MaterialIcons, Ionicons } from "@expo/vector-icons";
 import type { Href } from "expo-router";
 import { usePathname, useRouter } from "expo-router";
 import type { ReactElement } from "react";
@@ -91,11 +91,11 @@ export default function Footerbar() {
   const { theme, isDark } = useTheme();
 
   const menuItems = [
-    { name: "Home", icon: <FontAwesome5 name="home" size={24} />, route: "/screens/Dashboard" as const },
-    { name: "Session", icon: <Entypo name="calendar" size={24} />, route: "/screens/Session" as const },
-    { name: "Profile", icon: <FontAwesome5 name="user" size={24} />, route: "/screens/Profile" as const },
-    { name: "Credits", icon: <FontAwesome5 name="coins" size={24} />, route: "/screens/Credits" as const },
-    { name: "Settings", icon: <MaterialIcons name="settings" size={24} />, route: "/screens/Settings" as const },
+    { name: "Home", icon: <FontAwesome5 name="home" size={20} />, route: "/screens/Dashboard" as const },
+    { name: "Chats", icon: <Ionicons name="chatbubbles" size={20} />, route: "/screens/chats/Chats" as const },
+    { name: "Profile", icon: <FontAwesome5 name="user" size={20} />, route: "/screens/Profile" as const },
+    { name: "Credits", icon: <FontAwesome5 name="coins" size={20} />, route: "/screens/Credits" as const },
+    { name: "Settings", icon: <MaterialIcons name="settings" size={20} />, route: "/screens/Settings" as const },
   ] satisfies { name: string; icon: ReactElement; route: Href }[];
 
   return (
@@ -108,7 +108,7 @@ export default function Footerbar() {
             // Active for any screens under /screens that are not dedicated tabs
             const isScreens = normalizedPath.startsWith("/screens/");
             const isOtherTab = [
-              "/screens/Session",
+              "/screens/chats/Chats",
               "/screens/Profile",
               "/screens/Credits",
               "/screens/Settings",
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
   },
   bottomSpace: {
     width: "100%",
-    height: 45,
+    height: 35,
     backgroundColor: "white",
   },
   footer: {
@@ -155,16 +155,28 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     alignItems: "center",
     width: "100%",
-    height: 70,
+    height: 60,
     backgroundColor: "#1e1e1e",
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: -3 },
-    shadowOpacity: 0.3,
-    shadowRadius: 3,
-    elevation: 5,
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 8,
+    paddingHorizontal: 10,
   },
-  iconContainer: { alignItems: "center" },
-  label: { fontSize: 12, color: "#f0f6fc", marginTop: 2 },
+  iconContainer: { 
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+  },
+  label: { 
+    fontSize: 10, 
+    color: "#f0f6fc", 
+    marginTop: 4,
+    fontWeight: "500",
+    letterSpacing: 0.3,
+  },
 });

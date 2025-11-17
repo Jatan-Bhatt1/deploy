@@ -12,7 +12,7 @@ exports.createSkill = async (req, res) => {
 
     // Create the skill
     const skill = await Skill.create({
-      userId: req.user,
+      userId: req.user._id,
       name,
       category,
       description: description || "",
@@ -21,12 +21,12 @@ exports.createSkill = async (req, res) => {
     });
 
     // Add skill to enhanced profile
-    let profile = await EnhancedProfile.findOne({ userId: req.user });
+    let profile = await EnhancedProfile.findOne({ userId: req.user._id });
     
     if (!profile) {
       // Create enhanced profile if it doesn't exist
       profile = await EnhancedProfile.create({
-        userId: req.user,
+        userId: req.user._id,
         skills: [skill._id]
       });
     } else {
@@ -53,7 +53,7 @@ exports.createSkill = async (req, res) => {
           name,
           category,
           description: description || "",
-          addedBy: req.user,
+          addedBy: req.user._id,
           usageCount: 1
         });
       }
@@ -79,7 +79,7 @@ exports.createSkill = async (req, res) => {
 exports.listMySkills = async (req, res) => {
   try {
     // Get skills with user information
-    const skills = await Skill.find({ userId: req.user })
+    const skills = await Skill.find({ userId: req.user._id })
       .sort({ createdAt: -1 })
       .select('name category description experience proofUrl')
       .lean();
@@ -177,4 +177,48 @@ exports.getUsersWithSkill = async (req, res) => {
   }
 };
 
+// Get teachers/users who have a specific skill by skill name
+exports.getTeachersBySkill = async (req, res) => {
+  try {
+    const { skillName } = req.params;
+    
+    if (!skillName) {
+      return res.status(400).json({ message: "Skill name is required" });
+    }
+
+    // Find all users who have this skill (case-insensitive)
+    const skills = await Skill.find({ 
+      name: { $regex: new RegExp(`^${skillName}$`, 'i') }
+    })
+    .populate('userId', 'name email avatarUrl')
+    .select('name category description experience proofUrl userId')
+    .lean();
+
+    if (!skills || skills.length === 0) {
+      return res.json([]);
+    }
+
+    // Transform to the expected format
+    const teachers = skills.map(skill => ({
+      _id: skill._id,
+      name: skill.name,
+      category: skill.category,
+      description: skill.description || '',
+      experience: skill.experience || '',
+      proofUrl: skill.proofUrl || '',
+      userId: {
+        _id: skill.userId._id,
+        name: skill.userId.name,
+        email: skill.userId.email
+      },
+      createdAt: skill.createdAt,
+      updatedAt: skill.updatedAt
+    }));
+
+    return res.json(teachers);
+  } catch (err) {
+    console.error("Error fetching teachers:", err);
+    return res.status(500).json({ message: err.message || "Failed to fetch teachers" });
+  }
+};
 

@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { getJson } from "../utils/api";
+import { useTheme } from "../theme/ThemeContext";
 
 interface SkillTeacher {
   _id: string;
@@ -32,6 +33,7 @@ interface SkillTeacher {
 export default function SkillDetail() {
   const { skillName } = useLocalSearchParams();
   const router = useRouter();
+  const { theme } = useTheme();
   const [teachers, setTeachers] = useState<SkillTeacher[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -48,12 +50,12 @@ export default function SkillDetail() {
       setError(null);
       const response = await getJson(`/api/skills/teachers/${encodeURIComponent(skillName as string)}`);
       
+      const data = await response.json();
+      
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || `Failed to fetch teachers (${response.status})`);
+        throw new Error(data.message || `Failed to fetch teachers (${response.status})`);
       }
       
-      const data = await response.json();
       setTeachers(data);
     } catch (err: any) {
       setError(err.message || "Failed to load teachers");
@@ -102,13 +104,10 @@ export default function SkillDetail() {
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.container}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Text style={styles.back}>← Back</Text>
-        </TouchableOpacity>
+      <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
         <View style={styles.centerContainer}>
-          <ActivityIndicator size="large" color="#007AFF" />
-          <Text style={styles.loadingText}>Loading teachers for {skillName}...</Text>
+          <ActivityIndicator size="large" color="#E0AA3E" />
+          <Text style={[styles.loadingText, { color: theme.text }]}>Loading teachers for {skillName}...</Text>
         </View>
       </SafeAreaView>
     );
@@ -116,13 +115,10 @@ export default function SkillDetail() {
 
   if (error) {
     return (
-      <SafeAreaView style={styles.container}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Text style={styles.back}>← Back</Text>
-        </TouchableOpacity>
+      <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
         <View style={styles.centerContainer}>
-          <Text style={styles.errorText}>{error}</Text>
-          <TouchableOpacity style={styles.retryButton} onPress={fetchSkillTeachers}>
+          <Text style={[styles.errorText, { color: theme.error }]}>{error}</Text>
+          <TouchableOpacity style={[styles.retryButton, { backgroundColor: theme.primary }]} onPress={fetchSkillTeachers}>
             <Text style={styles.retryButtonText}>Retry</Text>
           </TouchableOpacity>
         </View>
@@ -132,55 +128,48 @@ export default function SkillDetail() {
 
   if (teachers.length === 0) {
     return (
-      <SafeAreaView style={styles.container}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Text style={styles.back}>← Back</Text>
-        </TouchableOpacity>
+      <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
         <View style={styles.centerContainer}>
-          <Text style={styles.emptyText}>No teachers found for {skillName}</Text>
-          <Text style={styles.emptySubtext}>Be the first to offer this skill!</Text>
+          <Text style={[styles.emptyText, { color: theme.text }]}>No teachers found for {skillName}</Text>
+          <Text style={[styles.emptySubtext, { color: theme.muted }]}>Be the first to offer this skill!</Text>
         </View>
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-        <Text style={styles.back}>← Back</Text>
-      </TouchableOpacity>
-      
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.contentContainer}>
-        <Text style={styles.title}>{skillName}</Text>
-        <Text style={styles.countText}>{teachers.length} teacher{teachers.length !== 1 ? 's' : ''} available</Text>
+        <Text style={[styles.title, { color: theme.text }]}>{skillName}</Text>
+        <Text style={[styles.countText, { color: theme.muted }]}>{teachers.length} teacher{teachers.length !== 1 ? 's' : ''} available</Text>
         
         {teachers.map((teacher) => (
           <TouchableOpacity
             key={teacher._id}
-            style={styles.teacherCard}
+            style={[styles.teacherCard, { backgroundColor: theme.surface, borderColor: theme.border }]}
             onPress={() => handleTeacherPress(teacher)}
             activeOpacity={0.7}
           >
             <View style={styles.teacherHeader}>
               <View style={styles.teacherInfo}>
-                <Text style={styles.teacherName}>{teacher.userId.name}</Text>
-                <Text style={styles.teacherEmail}>{teacher.userId.email}</Text>
+                <Text style={[styles.teacherName, { color: theme.text }]}>{teacher.userId.name}</Text>
+                <Text style={[styles.teacherEmail, { color: theme.muted }]}>{teacher.userId.email}</Text>
               </View>
-              <View style={styles.categoryBadge}>
+              <View style={[styles.categoryBadge, { backgroundColor: theme.primary }]}>
                 <Text style={styles.categoryText}>{teacher.category}</Text>
               </View>
             </View>
             
             {teacher.description && (
-              <Text style={styles.teacherDescription} numberOfLines={3}>
+              <Text style={[styles.teacherDescription, { color: theme.text }]} numberOfLines={3}>
                 {teacher.description}
               </Text>
             )}
             
             {teacher.experience && (
-              <View style={styles.experienceContainer}>
-                <Text style={styles.experienceLabel}>Experience:</Text>
-                <Text style={styles.experienceText}>{teacher.experience}</Text>
+              <View style={[styles.experienceContainer, { backgroundColor: theme.secondaryBackground }]}>
+                <Text style={[styles.experienceLabel, { color: theme.muted }]}>Experience:</Text>
+                <Text style={[styles.experienceText, { color: theme.text }]}>{teacher.experience}</Text>
               </View>
             )}
             
@@ -218,16 +207,13 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: 16,
-    paddingTop: 80,
-    paddingBottom: 100,
+    paddingBottom: 32,
   },
   centerContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#F7F9FC",
     padding: 20,
-    paddingTop: 80,
   },
   backButton: {
     position: "absolute",
@@ -250,17 +236,16 @@ const styles = StyleSheet.create({
     fontWeight: "600" 
   },
   title: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: "700",
     color: "#222",
     marginBottom: 8,
-    textAlign: "center",
+    marginTop: 8,
   },
   countText: {
-    fontSize: 16,
+    fontSize: 15,
     color: "#666",
-    marginBottom: 24,
-    textAlign: "center",
+    marginBottom: 20,
   },
   loadingText: {
     fontSize: 16,
@@ -300,13 +285,15 @@ const styles = StyleSheet.create({
   teacherCard: {
     backgroundColor: "white",
     borderRadius: 16,
-    padding: 20,
+    padding: 18,
     marginBottom: 16,
+    borderWidth: 1,
+    borderColor: "#e5e5e5",
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 6,
-    elevation: 5,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 3,
   },
   teacherHeader: {
     flexDirection: "row",
@@ -318,7 +305,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   teacherName: {
-    fontSize: 20,
+    fontSize: 19,
     fontWeight: "700",
     color: "#222",
     marginBottom: 4,
@@ -347,9 +334,9 @@ const styles = StyleSheet.create({
   },
   experienceContainer: {
     backgroundColor: "#F0F8FF",
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 16,
+    padding: 14,
+    borderRadius: 10,
+    marginBottom: 14,
   },
   experienceLabel: {
     fontSize: 14,

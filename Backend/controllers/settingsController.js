@@ -4,7 +4,7 @@ const EnhancedProfile = require("../models/EnhancedProfile");
 // Update user settings (name, email, avatar)
 exports.updateSettings = async (req, res) => {
   try {
-    const user = await User.findById(req.user);
+    const user = await User.findById(req.user._id);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -34,10 +34,10 @@ exports.updateEnhancedProfile = async (req, res) => {
     const { gender, dob, role, phone, education } = req.body;
 
     // Find or create enhanced profile
-    let enhancedProfile = await EnhancedProfile.findOne({ userId: req.user });
+    let enhancedProfile = await EnhancedProfile.findOne({ userId: req.user._id });
     
     if (!enhancedProfile) {
-      enhancedProfile = new EnhancedProfile({ userId: req.user });
+      enhancedProfile = new EnhancedProfile({ userId: req.user._id });
     }
 
     // Update fields
@@ -66,12 +66,12 @@ exports.updateEnhancedProfile = async (req, res) => {
 // Get enhanced profile
 exports.getEnhancedProfile = async (req, res) => {
   try {
-    const enhancedProfile = await EnhancedProfile.findOne({ userId: req.user });
+    const enhancedProfile = await EnhancedProfile.findOne({ userId: req.user._id });
     
     if (!enhancedProfile) {
       return res.json({
         _id: null,
-        userId: req.user,
+        userId: req.user._id,
         gender: null,
         dob: null,
         role: "other",

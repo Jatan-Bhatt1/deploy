@@ -40,11 +40,6 @@ async function fetchWithTimeout(input: RequestInfo | URL, init: RequestInit & { 
 
 export async function postJson<T>(path: string, body: unknown, extraHeaders: Record<string, string> = {}): Promise<Response> {
   const base = resolveApiBase();
-  // Debug: print the full URL being called so you can confirm in Expo logs
-  try {
-    // eslint-disable-next-line no-console
-    console.log(`API POST -> ${base}${path}`);
-  } catch {}
   try {
     return await fetchWithTimeout(`${base}${path}`, {
       method: "POST",

@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     avatarUrl: { type: String },
+    credits: { type: Number, default: 100 }, // Starting credits for new users
   },
   { timestamps: true }
 );

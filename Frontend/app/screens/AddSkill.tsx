@@ -143,7 +143,7 @@ export default function AddSkill() {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
+    <ScrollView contentContainerStyle={[styles.container, { backgroundColor: theme.background }]} keyboardShouldPersistTaps="handled">
       <Text style={[styles.title, { color: theme.text }]}>Add Skill</Text>
 
       <Text style={[styles.label, { color: theme.text }]}>Category</Text>
@@ -154,9 +154,13 @@ export default function AddSkill() {
             <TouchableOpacity
               key={opt}
               onPress={() => setCategory(opt)}
-              style={[styles.pill, active && styles.pillActive]}
+              style={[
+                styles.pill,
+                { backgroundColor: active ? theme.primary : theme.secondaryBackground, borderColor: active ? theme.primary : theme.border },
+                active && styles.pillActive
+              ]}
             >
-              <Text style={[styles.pillText, active && styles.pillTextActive]}>{opt}</Text>
+              <Text style={[styles.pillText, { color: active ? "#fff" : theme.text }, active && styles.pillTextActive]}>{opt}</Text>
             </TouchableOpacity>
           );
         })}
@@ -176,7 +180,7 @@ export default function AddSkill() {
           {skillsForCategory.map((s) => {
             const isSelected = selectedSkillNames.has(s.name || "");
             return (
-              <TouchableOpacity
+                <TouchableOpacity
                 key={s.name}
                 onPress={() => {
                   const label = s.name || "";
@@ -186,9 +190,13 @@ export default function AddSkill() {
                   if (!name) setName(label);
                   if (s.description && !description) setDescription(s.description);
                 }}
-                style={[styles.pill, isSelected && styles.pillActive]}
+                style={[
+                  styles.pill,
+                  { backgroundColor: isSelected ? theme.primary : theme.secondaryBackground, borderColor: isSelected ? theme.primary : theme.border },
+                  isSelected && styles.pillActive
+                ]}
               >
-                <Text style={[styles.pillText, isSelected && styles.pillTextActive]}>{s.name}</Text>
+                <Text style={[styles.pillText, { color: isSelected ? "#fff" : theme.text }, isSelected && styles.pillTextActive]}>{s.name}</Text>
               </TouchableOpacity>
             );
           })}
@@ -203,7 +211,7 @@ export default function AddSkill() {
             {sharedSkills.map((s) => {
               const isSelected = selectedSkillNames.has(s.name || "");
               return (
-                <TouchableOpacity
+                  <TouchableOpacity
                   key={s.name}
                   onPress={() => {
                     const label = s.name || "";
@@ -213,11 +221,15 @@ export default function AddSkill() {
                     if (!name) setName(label);
                     if (s.description && !description) setDescription(s.description);
                   }}
-                  style={[styles.pill, isSelected && styles.pillActive, { backgroundColor: isSelected ? "#0a7ea4" : "#2a2a2a" }]}
+                  style={[
+                    styles.pill,
+                    { backgroundColor: isSelected ? theme.primary : theme.secondaryBackground, borderColor: isSelected ? theme.primary : theme.border },
+                    isSelected && styles.pillActive
+                  ]}
                 >
-                  <Text style={[styles.pillText, isSelected && styles.pillTextActive]}>{s.name}</Text>
+                  <Text style={[styles.pillText, { color: isSelected ? "#fff" : theme.text }, isSelected && styles.pillTextActive]}>{s.name}</Text>
                   {s.usageCount > 1 && (
-                    <Text style={[styles.usageCount, { color: isSelected ? "#fff" : "#888" }]}>
+                    <Text style={[styles.usageCount, { color: isSelected ? "#fff" : theme.muted }]}>
                       ({s.usageCount} users)
                     </Text>
                   )}

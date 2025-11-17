@@ -1,1 +1,1 @@
-export { resolveApiBase, postJson } from "../../lib/api";
+export { resolveApiBase, postJson, getJson } from "../../lib/api";
