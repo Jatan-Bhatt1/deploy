@@ -15,6 +15,7 @@ import { useRouter } from "expo-router";
 import { Ionicons, Entypo } from "@expo/vector-icons";
 import { resolveApiBase } from "../../utils/api";
 import { useTheme } from "../../theme/ThemeContext";
+import { CLOUDINARY_ASSETS } from "../../constants/cloudinaryAssets";
 
 interface User {
   _id: string;
@@ -210,7 +211,7 @@ export default function Chats() {
                   source={
                     item.avatarUrl
                       ? { uri: item.avatarUrl }
-                      : require("../../../assets/images/default-avatar.jpg")
+                      : { uri: CLOUDINARY_ASSETS.DEFAULT_AVATAR }
                   }
                   style={styles.searchAvatar}
                 />
@@ -261,7 +262,7 @@ export default function Chats() {
                     source={
                       item.avatarUrl
                         ? { uri: item.avatarUrl }
-                        : require("../../../assets/images/default-avatar.jpg")
+                        : { uri: CLOUDINARY_ASSETS.DEFAULT_AVATAR }
                     }
                     style={styles.avatar}
                   />

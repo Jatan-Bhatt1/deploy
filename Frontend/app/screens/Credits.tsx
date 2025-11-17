@@ -17,6 +17,7 @@ import FooterBar from "../_components/Footerbar";
 import { useTheme } from "../theme/ThemeContext";
 import { resolveApiBase } from "../utils/api";
 import { LinearGradient } from "expo-linear-gradient";
+import { CLOUDINARY_ASSETS } from "../constants/cloudinaryAssets";
 
 type Payment = {
   _id: string;
@@ -116,7 +117,7 @@ export default function Credits() {
     }
   };
 
-  const defaultAvatar = require("../../assets/images/default-avatar.jpg");
+  const defaultAvatar = { uri: CLOUDINARY_ASSETS.DEFAULT_AVATAR };
 
   if (loading) {
     return (

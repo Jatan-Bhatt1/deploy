@@ -1,3 +1,5 @@
+import { CLOUDINARY_ASSETS } from "../constants/cloudinaryAssets";
+
 export interface Skill {
   name: string;
   description?: string;
@@ -20,7 +22,7 @@ export const skillCategories: SkillCategory[] = [
     title: "Technical & Digital Skills",
     description: "Skills related to computers, data, and technology.",
     color: "#B2E7C9",
-    image: require("../../assets/images/creative.png"),
+    image: { uri: CLOUDINARY_ASSETS.CATEGORY_IMAGES.creative },
     route: "screens/batches/creative",
     skills: [
       { name: "Programming", description: "C++, Python, Java, etc." },
@@ -40,7 +42,7 @@ export const skillCategories: SkillCategory[] = [
     title: "Engineering & Physical Sciences",
     description: "Skills involving design, creation, and application of scientific principles.",
     color: "#FFD6A5",
-    image: require("../../assets/images/mentorships.png"),
+    image: { uri: CLOUDINARY_ASSETS.CATEGORY_IMAGES.mentorships },
     route: "screens/batches/mentorships",
     skills: [
       { name: "Electrical & Electronics Engineering" },
@@ -59,7 +61,7 @@ export const skillCategories: SkillCategory[] = [
     title: "Business, Finance & Management Skills",
     description: "Skills for leadership, organization, and economic understanding.",
     color: "#A7D8FF",
-    image: require("../../assets/images/music.png"),
+    image: { uri: CLOUDINARY_ASSETS.CATEGORY_IMAGES.music },
     route: "screens/batches/music",
     skills: [
       { name: "Business Strategy & Entrepreneurship" },
@@ -79,7 +81,7 @@ export const skillCategories: SkillCategory[] = [
     title: "Creative, Media & Communication Skills",
     description: "Skills for artistic, expressive, and media-related fields.",
     color: "#D0B3FF",
-    image: require("../../assets/images/studies.png"),
+    image: { uri: CLOUDINARY_ASSETS.CATEGORY_IMAGES.studies },
     route: "screens/batches/studies",
     skills: [
       { name: "Graphic Design & Animation" },
@@ -99,7 +101,7 @@ export const skillCategories: SkillCategory[] = [
     title: "Science, Health & Research Skills",
     description: "Skills focused on discovery, innovation, and human well-being.",
     color: "#FFF59D",
-    image: require("../../assets/images/competition.png"),
+    image: { uri: CLOUDINARY_ASSETS.CATEGORY_IMAGES.competition },
     route: "screens/batches/competition",
     skills: [
       { name: "Biology, Chemistry, Physics" },
@@ -118,7 +120,7 @@ export const skillCategories: SkillCategory[] = [
     title: "Personal Development & Social Skills",
     description: "Skills that improve human interaction, mindset, and lifestyle.",
     color: "#F6A5C0",
-    image: require("../../assets/images/more.png"),
+    image: { uri: CLOUDINARY_ASSETS.CATEGORY_IMAGES.more },
     route: "screens/batches/more",
     skills: [
       { name: "Communication & Public Speaking" },

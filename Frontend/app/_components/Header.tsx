@@ -6,6 +6,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTheme } from "../theme/ThemeContext";
 import { resolveApiBase } from "../utils/api";
+import { CLOUDINARY_ASSETS } from "../constants/cloudinaryAssets";
 
 type HeaderProps = {
   userName?: string;
@@ -15,7 +16,7 @@ type HeaderProps = {
 function TopBar() {
   const router = useRouter();
   const { theme } = useTheme();
-  const [avatarUrl, setAvatarUrl] = useState<string>((globalThis as any).__AVATAR_URL__ || Image.resolveAssetSource(require("../../assets/images/default-avatar.jpg")).uri);
+  const [avatarUrl, setAvatarUrl] = useState<string>((globalThis as any).__AVATAR_URL__ || CLOUDINARY_ASSETS.DEFAULT_AVATAR);
   const [credits, setCredits] = useState<number>(0);
 
   useFocusEffect(

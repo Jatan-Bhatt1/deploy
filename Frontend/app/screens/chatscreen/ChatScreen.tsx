@@ -23,6 +23,7 @@ import { useRoute, useNavigation } from "@react-navigation/native";
 import { resolveApiBase } from "../../utils/api";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../../theme/ThemeContext";
+import { CLOUDINARY_ASSETS } from "../../constants/cloudinaryAssets";
 
 type MessageItem = {
   _id?: string;
@@ -395,7 +396,7 @@ export default function ChatScreen() {
             source={
               receiverAvatar
                 ? { uri: receiverAvatar }
-                : require("../../../assets/images/default-avatar.jpg")
+                : { uri: CLOUDINARY_ASSETS.DEFAULT_AVATAR }
             }
             style={[styles.headerAvatar, { backgroundColor: theme.border }]}
           />

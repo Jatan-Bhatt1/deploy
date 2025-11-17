@@ -18,6 +18,7 @@ import Header, { SearchBar, TopBar, Greeting } from "../_components/Header";
 import FooterBar from "../_components/Footerbar";
 import { useTheme } from "../theme/ThemeContext";
 import { skillCategories, type SkillCategory } from "../data/skillCategories";
+import { CLOUDINARY_ASSETS } from "../constants/cloudinaryAssets";
 
 const { width } = Dimensions.get("window");
 const router = useRouter();
@@ -51,37 +52,37 @@ export default function Dashboard() {
     {
       title: "Creative",
       color: "#B2E7C9",
-      image: require("../../assets/images/creative.png"),
+      image: { uri: CLOUDINARY_ASSETS.CATEGORY_IMAGES.creative },
       route: "screens/batches/creative",
     },
     {
       title: "Mentorships",
       color: "#FFD6A5",
-      image: require("../../assets/images/mentorships.png"),
+      image: { uri: CLOUDINARY_ASSETS.CATEGORY_IMAGES.mentorships },
       route: "screens/batches/mentorships",
     },
     {
       title: "Music & Dance",
       color: "#A7D8FF",
-      image: require("../../assets/images/music.png"),
+      image: { uri: CLOUDINARY_ASSETS.CATEGORY_IMAGES.music },
       route: "screens/batches/music",
     },
     {
       title: "Studies (Primary & Secondary)",
       color: "#D0B3FF",
-      image: require("../../assets/images/studies.png"),
+      image: { uri: CLOUDINARY_ASSETS.CATEGORY_IMAGES.studies },
       route: "screens/batches/studies",
     },
     {
       title: "Competitions",
       color: "#FFF59D",
-      image: require("../../assets/images/competition.png"),
+      image: { uri: CLOUDINARY_ASSETS.CATEGORY_IMAGES.competition },
       route: "screens/batches/competition",
     },
     {
       title: "More",
       color: "#F6A5C0",
-      image: require("../../assets/images/more.png"),
+      image: { uri: CLOUDINARY_ASSETS.CATEGORY_IMAGES.more },
       route: "screens/batches/more",
     },
   ];

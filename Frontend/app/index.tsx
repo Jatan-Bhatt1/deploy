@@ -53,6 +53,7 @@
 import { useRouter } from "expo-router";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { useTheme } from "./theme/ThemeContext";
+import { CLOUDINARY_ASSETS } from "./constants/cloudinaryAssets";
 
 export default function Home() {
   const router = useRouter();
@@ -60,7 +61,7 @@ export default function Home() {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <Image source={require("../assets/images/default-avatar.jpg")} style={{ width: 120, height: 120, borderRadius: 24 }} />
+      <Image source={{ uri: CLOUDINARY_ASSETS.DEFAULT_AVATAR }} style={{ width: 120, height: 120, borderRadius: 24 }} />
 
       <Text style={[styles.title, { color: theme.text }]}>Welcome 👋</Text>
 

@@ -14,6 +14,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons, Entypo } from "@expo/vector-icons";
 import { resolveApiBase } from "../utils/api";
 import { useTheme } from "../theme/ThemeContext";
+import { CLOUDINARY_ASSETS } from "../constants/cloudinaryAssets";
 
 interface SearchResult {
   _id: string;
@@ -76,9 +77,7 @@ export default function SearchResults() {
     });
   };
 
-  const defaultAvatar = Image.resolveAssetSource(
-    require("../../assets/images/default-avatar.jpg")
-  ).uri;
+  const defaultAvatar = CLOUDINARY_ASSETS.DEFAULT_AVATAR;
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>

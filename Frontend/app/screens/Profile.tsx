@@ -17,6 +17,7 @@ import FooterBar from "../_components/Footerbar";
 import { useRouter } from "expo-router";
 import { resolveApiBase } from "../../lib/api";
 import { useTheme } from '../theme/ThemeContext';
+import { CLOUDINARY_ASSETS } from "../constants/cloudinaryAssets";
 
 const PROFILE_MENU = [
   { key: "my-profile", label: "My Profile", icon: "person-circle-outline" },
@@ -43,9 +44,7 @@ export default function Profile() {
     phone: string | null;
     education: string | null;
   }>(null);
-  const initialFallback = Image.resolveAssetSource(
-    require("../../assets/images/default-avatar.jpg")
-  ).uri;
+  const initialFallback = CLOUDINARY_ASSETS.DEFAULT_AVATAR;
   const [avatarUrl, setAvatarUrl] = useState(initialFallback);
   const [pendingAvatarUri, setPendingAvatarUri] = useState<string>("");
   const [name, setName] = useState<string>("");

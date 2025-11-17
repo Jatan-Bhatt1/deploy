@@ -1,0 +1,200 @@
+const dotenv = require("dotenv");
+const path = require("path");
+
+// Load environment variables
+dotenv.config({ path: path.join(__dirname, "../.env") });
+dotenv.config({ path: path.join(__dirname, "../../.env") });
+
+const cloudinary = require("../utils/cloudinary");
+const fs = require("fs");
+
+// Images to upload with their Cloudinary folder and public_id
+const imagesToUpload = [
+  // Backend assets
+  {
+    localPath: path.join(__dirname, "../assets/default-avatar.jpg.jpg"),
+    folder: "trot/default-avatars",
+    publicId: "default-avatar",
+    description: "Default user avatar"
+  },
+  // Frontend assets
+  {
+    localPath: path.join(__dirname, "../../Frontend/assets/images/default-avatar.jpg"),
+    folder: "trot/images",
+    publicId: "default-avatar",
+    description: "Default avatar for frontend"
+  },
+  {
+    localPath: path.join(__dirname, "../../Frontend/assets/images/creative.png"),
+    folder: "trot/images",
+    publicId: "creative",
+    description: "Creative category image"
+  },
+  {
+    localPath: path.join(__dirname, "../../Frontend/assets/images/mentorships.png"),
+    folder: "trot/images",
+    publicId: "mentorships",
+    description: "Mentorships category image"
+  },
+  {
+    localPath: path.join(__dirname, "../../Frontend/assets/images/music.png"),
+    folder: "trot/images",
+    publicId: "music",
+    description: "Music category image"
+  },
+  {
+    localPath: path.join(__dirname, "../../Frontend/assets/images/studies.png"),
+    folder: "trot/images",
+    publicId: "studies",
+    description: "Studies category image"
+  },
+  {
+    localPath: path.join(__dirname, "../../Frontend/assets/images/competition.png"),
+    folder: "trot/images",
+    publicId: "competition",
+    description: "Competition category image"
+  },
+  {
+    localPath: path.join(__dirname, "../../Frontend/assets/images/more.png"),
+    folder: "trot/images",
+    publicId: "more",
+    description: "More category image"
+  },
+  {
+    localPath: path.join(__dirname, "../../Frontend/assets/images/technical.png"),
+    folder: "trot/images",
+    publicId: "technical",
+    description: "Technical category image"
+  }
+];
+
+async function uploadImage(imageConfig) {
+  try {
+    // Check if file exists
+    if (!fs.existsSync(imageConfig.localPath)) {
+      console.log(`⚠️  File not found: ${imageConfig.localPath}`);
+      return null;
+    }
+
+    console.log(`📤 Uploading: ${imageConfig.description}...`);
+    
+    const result = await cloudinary.uploader.upload(imageConfig.localPath, {
+      folder: imageConfig.folder,
+      public_id: imageConfig.publicId,
+      overwrite: true,
+      resource_type: "image"
+    });
+
+    console.log(`✅ Uploaded: ${result.secure_url}`);
+    return {
+      name: imageConfig.publicId,
+      url: result.secure_url,
+      publicId: result.public_id,
+      folder: imageConfig.folder
+    };
+  } catch (error) {
+    console.error(`❌ Error uploading ${imageConfig.description}:`, error.message);
+    return null;
+  }
+}
+
+async function uploadAllImages() {
+  console.log("🚀 Starting Cloudinary upload process...\n");
+  
+  const results = [];
+  
+  for (const imageConfig of imagesToUpload) {
+    const result = await uploadImage(imageConfig);
+    if (result) {
+      results.push(result);
+    }
+    // Small delay to avoid rate limiting
+    await new Promise(resolve => setTimeout(resolve, 500));
+  }
+
+  console.log("\n📊 Upload Summary:");
+  console.log(`✅ Successfully uploaded: ${results.length}/${imagesToUpload.length} images\n`);
+  
+  // Generate constants file content
+  const constantsContent = generateConstantsFile(results);
+  
+  // Save to file
+  const constantsPath = path.join(__dirname, "../config/cloudinaryAssets.js");
+  fs.writeFileSync(constantsPath, constantsContent);
+  console.log(`📝 Generated constants file: ${constantsPath}\n`);
+  
+  console.log("🎉 Upload complete! All images are now on Cloudinary.");
+  console.log("\n📋 Next steps:");
+  console.log("1. Review the generated constants file");
+  console.log("2. Update your code to use these Cloudinary URLs");
+  console.log("3. Delete the assets folders");
+  
+  return results;
+}
+
+function generateConstantsFile(results) {
+  const defaultAvatar = results.find(r => r.name === "default-avatar" && r.folder === "trot/images");
+  const backendAvatar = results.find(r => r.name === "default-avatar" && r.folder === "trot/default-avatars");
+  
+  const categoryImages = {
+    creative: results.find(r => r.name === "creative")?.url,
+    mentorships: results.find(r => r.name === "mentorships")?.url,
+    music: results.find(r => r.name === "music")?.url,
+    studies: results.find(r => r.name === "studies")?.url,
+    competition: results.find(r => r.name === "competition")?.url,
+    more: results.find(r => r.name === "more")?.url,
+    technical: results.find(r => r.name === "technical")?.url,
+  };
+
+  return `// Cloudinary Asset URLs
+// Auto-generated by uploadAssetsToCloudinary.js
+// DO NOT EDIT MANUALLY - Regenerate if images are re-uploaded
+
+module.exports = {
+  // Default avatars
+  DEFAULT_AVATAR: "${defaultAvatar?.url || ""}",
+  DEFAULT_AVATAR_BACKEND: "${backendAvatar?.url || ""}",
+  
+  // Category images
+  CATEGORY_IMAGES: {
+    creative: "${categoryImages.creative || ""}",
+    mentorships: "${categoryImages.mentorships || ""}",
+    music: "${categoryImages.music || ""}",
+    studies: "${categoryImages.studies || ""}",
+    competition: "${categoryImages.competition || ""}",
+    more: "${categoryImages.more || ""}",
+    technical: "${categoryImages.technical || ""}",
+  },
+  
+  // Helper function to get category image
+  getCategoryImage: (category) => {
+    const categoryMap = {
+      creative: "${categoryImages.creative || ""}",
+      mentorships: "${categoryImages.mentorships || ""}",
+      music: "${categoryImages.music || ""}",
+      studies: "${categoryImages.studies || ""}",
+      competition: "${categoryImages.competition || ""}",
+      more: "${categoryImages.more || ""}",
+      technical: "${categoryImages.technical || ""}",
+    };
+    return categoryMap[category?.toLowerCase()] || "${categoryImages.more || ""}";
+  }
+};
+`;
+}
+
+// Run if called directly
+if (require.main === module) {
+  uploadAllImages()
+    .then(() => {
+      console.log("\n✅ Script completed successfully!");
+      process.exit(0);
+    })
+    .catch((error) => {
+      console.error("\n❌ Script failed:", error);
+      process.exit(1);
+    });
+}
+
+module.exports = { uploadAllImages, uploadImage };
+
