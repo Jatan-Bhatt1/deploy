@@ -1,0 +1,11 @@
+{
+  "cli": {
+    "version": ">= 8.5.0"
+  },
+  "build": {
+    "preview": {
+      "developmentClient": false,
+      "distribution": "internal"
+    }
+  }
+}
