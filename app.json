@@ -5,7 +5,9 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./Frontend/assets/images/default-avatar.jpg",
-    "scheme": "TROT",
+    "scheme": [
+      "trot"
+    ],
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -40,6 +42,21 @@
           "backgroundColor": "#ffffff"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "router": {
+        "root": "Frontend/app"
+      },
+      "eas": {
+        "projectId": "33be89d0-da78-4fab-b2d5-e988c786dc96"
+      }
+    },
+    "owner": "jatan0000",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/33be89d0-da78-4fab-b2d5-e988c786dc96"
+    }
   }
 }
